@@ -85,7 +85,7 @@ export default function App() {
 
               <div className="flex flex-col sm:flex-row items-center gap-4">
                 <button 
-                  onClick={() => window.location.href = "https://buy.stripe.com/test_5kQ4gzb64dih7bud2x2sM00"}
+                  onClick={() => window.location.href = "https://amanp69.gumroad.com/l/oasisos"}
                   className="w-full sm:w-auto px-8 py-4 bg-cyan-500 hover:bg-cyan-400 text-black font-sans font-bold uppercase tracking-wide transition-all shadow-[0_0_30px_rgba(0,255,255,0.2)] flex items-center justify-center gap-3"
                 >
                   Initialize Interface
@@ -308,7 +308,7 @@ export default function App() {
                     <span className="text-6xl font-sans font-extrabold text-white tracking-tighter">29</span>
                   </div>
                   
-                  <button onClick={() => window.location.href = "https://buy.stripe.com/test_5kQ4gzb64dih7bud2x2sM00"} className="w-full py-4 px-8 bg-cyan-500 hover:bg-cyan-400 text-black font-sans font-bold text-sm uppercase tracking-widest transition-all shadow-[0_0_20px_rgba(0,255,255,0.3)] mb-4">
+                  <button onClick={() => window.location.href = "https://amanp69.gumroad.com/l/oasisos"} className="w-full py-4 px-8 bg-cyan-500 hover:bg-cyan-400 text-black font-sans font-bold text-sm uppercase tracking-widest transition-all shadow-[0_0_20px_rgba(0,255,255,0.3)] mb-4">
                     Acquire Key
                   </button>
                   
