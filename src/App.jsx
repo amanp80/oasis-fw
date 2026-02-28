@@ -1,13 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
 
 // --- Analytics Tracking Utility (Mockup) ---
 const trackEvent = (eventName, data = {}) => {
   console.log(`[Analytics] Event: ${eventName}`, data);
-  // In a real app, this is where you'd call Mixpanel, PostHog, or Google Analytics
-  // e.g. window.gtag('event', eventName, data);
 };
-
 
 // --- Hardcoded Futuristic SVGs ---
 const NeuralNodeIcon = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M12 2v4" /><path d="M12 18v4" /><path d="M4.93 4.93l2.83 2.83" /><path d="M16.24 16.24l2.83 2.83" /><path d="M2 12h4" /><path d="M18 12h4" /><path d="M4.93 19.07l2.83-2.83" /><path d="M16.24 7.76l2.83-2.83" /><circle cx="12" cy="12" r="4" /></svg>;
@@ -21,11 +17,6 @@ export default function App() {
   const [glitchText, setGlitchText] = useState("Dopamine Exhaustion Detected.");
   const [activeModule, setActiveModule] = useState('predictive');
   const [isHoveringEye, setIsHoveringEye] = useState(false);
-
-  // Scroll animations setup
-  const { scrollY } = useScroll();
-  const backgroundY = useTransform(scrollY, [0, 1000], [0, 200]);
-  const backgroundOpacity = useTransform(scrollY, [0, 500], [0.2, 0.05]);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -49,8 +40,6 @@ export default function App() {
     return () => clearInterval(interval);
   }, []);
 
-  const scrollToPricing = () => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
-
   const handleAcquireKey = (location) => {
     trackEvent('acquire_key_clicked', { location });
     window.location.href = "https://amanp69.gumroad.com/l/oasisos";
@@ -59,14 +48,11 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#000000] text-zinc-300 font-mono selection:bg-cyan-900 selection:text-cyan-100 overflow-x-hidden">
 
-      {/* HUD Background Effects */}
-      <motion.div
-        className="fixed inset-0 z-0 pointer-events-none"
-        style={{ y: backgroundY, opacity: backgroundOpacity }}
-      >
+      {/* HUD Background Effects (CSS Only) */}
+      <div className="fixed inset-0 z-0 pointer-events-none opacity-20">
         <div className="absolute top-0 left-0 w-full h-full bg-[linear-gradient(rgba(0,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(0,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
         <div className="absolute top-[20%] right-[-10%] w-[40vw] h-[40vw] rounded-full bg-cyan-600/10 blur-[150px]"></div>
-      </motion.div>
+      </div>
 
       {/* Cybernetic Navbar */}
       <nav className={`fixed top-0 w-full z-50 transition-all duration-300 border-b ${scrolled ? 'bg-black/80 backdrop-blur-md border-cyan-900/50 py-4' : 'bg-transparent border-transparent py-6'}`}>
@@ -89,11 +75,7 @@ export default function App() {
           <div className="grid lg:grid-cols-2 gap-16 items-center">
 
             {/* Left: The Vision Pitch */}
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-            >
+            <div>
               <div className="inline-flex items-center gap-3 px-4 py-2 border border-cyan-500/30 bg-cyan-500/5 mb-8">
                 <BioWaveIcon className="w-4 h-4 text-cyan-400" />
                 <span className="text-[11px] font-bold text-cyan-400 uppercase tracking-widest">Biometric Readiness: Standby</span>
@@ -126,15 +108,10 @@ export default function App() {
                   <span className="text-xs text-zinc-500">Fund the future of cognition.</span>
                 </div>
               </div>
-            </motion.div>
+            </div>
 
             {/* Right: Futuristic HUD Mockup */}
-            <motion.div
-              initial={{ opacity: 0, x: 50, scale: 0.95 }}
-              animate={{ opacity: 1, x: 0, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-              className="relative w-full aspect-square md:aspect-[4/3] border border-cyan-900/50 bg-[#050508] p-1 flex flex-col shadow-[0_0_50px_rgba(0,255,255,0.05)] group/hud"
-            >
+            <div className="relative w-full aspect-square md:aspect-[4/3] border border-cyan-900/50 bg-[#050508] p-1 flex flex-col shadow-[0_0_50px_rgba(0,255,255,0.05)] group/hud">
               {/* HUD Frame Decorators */}
               <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-cyan-500"></div>
               <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-cyan-500"></div>
@@ -150,46 +127,25 @@ export default function App() {
                 <div className="flex justify-between items-start mb-8 border-b border-cyan-900/50 pb-4">
                   <div>
                     <div className="text-[10px] text-cyan-500 tracking-widest uppercase mb-1">Subject Status</div>
-                    <AnimatePresence mode="wait">
-                      <motion.div
-                        key={glitchText}
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: 10 }}
-                        transition={{ duration: 0.2 }}
-                        className="text-sm text-white"
-                      >
+                    <div className="text-sm text-white transition-opacity duration-300">
                         {glitchText}
-                      </motion.div>
-                    </AnimatePresence>
+                    </div>
                   </div>
                   <CpuIcon className="w-6 h-6 text-cyan-400 opacity-50" />
                 </div>
 
                 {/* Central "Eye" / Node */}
-                <div
-                  className="flex-1 flex items-center justify-center relative perspective-1000"
+                <div 
+                  className="flex-1 flex items-center justify-center relative perspective-1000 group/eye cursor-pointer"
                   onMouseEnter={() => setIsHoveringEye(true)}
                   onMouseLeave={() => setIsHoveringEye(false)}
                 >
-                  <motion.div
-                    animate={{ rotateZ: isHoveringEye ? 360 : 0 }}
-                    transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-                    className="absolute w-64 h-64 border border-cyan-900/40 rounded-full"
-                  />
-                  <motion.div
-                    animate={{ rotateZ: isHoveringEye ? -360 : 0 }}
-                    transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-                    className="absolute w-48 h-48 border border-dashed border-cyan-800/60 rounded-full"
-                  />
+                  <div className={`absolute w-64 h-64 border border-cyan-900/40 rounded-full transition-transform duration-1000 ${isHoveringEye ? 'rotate-[180deg] scale-105' : 'animate-[spin_10s_linear_infinite]'}`} />
+                  <div className={`absolute w-48 h-48 border border-dashed border-cyan-800/60 rounded-full transition-transform duration-1000 ${isHoveringEye ? '-rotate-[180deg] scale-105' : 'animate-[spin_15s_linear_infinite_reverse]'}`} />
 
-                  <motion.div
-                    animate={{ scale: isHoveringEye ? 1.05 : 1 }}
-                    transition={{ duration: 0.3 }}
-                    className="w-32 h-32 rounded-full bg-cyan-900/20 backdrop-blur-md border border-cyan-500/30 flex items-center justify-center shadow-[0_0_40px_rgba(0,255,255,0.1)] group-hover/hud:shadow-[0_0_60px_rgba(0,255,255,0.2)] transition-shadow duration-500"
-                  >
-                    <EyeScannerIcon className={`w-12 h-12 text-cyan-400 transition-all duration-300 ${isHoveringEye ? 'scale-110' : ''}`} />
-                  </motion.div>
+                  <div className="w-32 h-32 rounded-full bg-cyan-900/20 backdrop-blur-md border border-cyan-500/30 flex items-center justify-center shadow-[0_0_40px_rgba(0,255,255,0.1)] group-hover/hud:shadow-[0_0_60px_rgba(0,255,255,0.2)] transition-shadow duration-500">
+                    <EyeScannerIcon className="w-12 h-12 text-cyan-400 transition-transform duration-300 group-hover/eye:scale-110" />
+                  </div>
                 </div>
 
                 {/* System Diagnostics */}
@@ -197,30 +153,24 @@ export default function App() {
                   <div className="border border-cyan-900/30 bg-cyan-900/10 p-3 group-hover/hud:border-cyan-500/30 transition-colors duration-500">
                     <div className="text-[9px] text-cyan-500 uppercase tracking-widest mb-1">Dopamine Baseline</div>
                     <div className="text-xl text-white font-light">CRITICAL</div>
-                    <div className="w-full bg-cyan-950 h-1 mt-2 overflow-hidden"><motion.div initial={{ width: "0%" }} animate={{ width: "25%" }} transition={{ duration: 1, delay: 0.5 }} className="h-full bg-rose-500"></motion.div></div>
+                    <div className="w-full bg-cyan-950 h-1 mt-2 overflow-hidden"><div className="h-full bg-rose-500 w-1/4"></div></div>
                   </div>
                   <div className="border border-cyan-900/30 bg-cyan-900/10 p-3 group-hover/hud:border-cyan-500/30 transition-colors duration-500">
                     <div className="text-[9px] text-cyan-500 uppercase tracking-widest mb-1">Algorithmic Shield</div>
                     <div className="text-xl text-white font-light">ENGAGED</div>
-                    <div className="w-full bg-cyan-950 h-1 mt-2 overflow-hidden"><motion.div initial={{ width: "0%" }} animate={{ width: "100%" }} transition={{ duration: 1.5, delay: 0.7 }} className="h-full bg-cyan-500"></motion.div></div>
+                    <div className="w-full bg-cyan-950 h-1 mt-2 overflow-hidden"><div className="h-full bg-cyan-500 w-full"></div></div>
                   </div>
                 </div>
 
               </div>
-            </motion.div>
+            </div>
 
           </div>
         </section>
 
         {/* THE MASTER PLAN (Vision Pitch) */}
         <section className="py-24 border-y border-zinc-900 bg-[#030303] overflow-hidden">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8 }}
-            className="max-w-4xl mx-auto px-6"
-          >
+          <div className="max-w-4xl mx-auto px-6">
             <div className="mb-16">
               <h2 className="text-xs text-cyan-500 tracking-[0.3em] uppercase mb-4">The Blueprint</h2>
               <h3 className="text-3xl md:text-4xl font-sans font-bold text-white leading-tight">We are building the software layer for human cognitive enhancement.</h3>
@@ -228,29 +178,17 @@ export default function App() {
 
             <div className="space-y-12 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-cyan-900/50 before:to-transparent">
 
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.1 }}
-                className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active"
-              >
-                <div className="flex items-center justify-center w-10 h-10 rounded-full border border-cyan-500 bg-black text-cyan-400 shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow-[0_0_15px_rgba(0,255,255,0.2)] z-10 transition-transform group-hover:scale-110">
+              <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                <div className="flex items-center justify-center w-10 h-10 rounded-full border border-cyan-500 bg-black text-cyan-400 shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow-[0_0_15px_rgba(0,255,255,0.2)] z-10 transition-transform hover:scale-110">
                   <span className="text-sm font-bold">1</span>
                 </div>
-                <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-6 bg-zinc-900/50 border border-zinc-800 backdrop-blur-sm group-hover:border-cyan-500/30 transition-colors">
+                <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-6 bg-zinc-900/50 border border-zinc-800 backdrop-blur-sm hover:border-cyan-500/30 transition-colors">
                   <h4 className="text-lg font-sans font-bold text-white mb-2">Phase 1: The OS Layer (Current)</h4>
                   <p className="text-sm text-zinc-400 leading-relaxed font-sans">A mobile app that acts as a middleware firewall. It uses algorithmic friction, Strict Mode, and grayscale degradation to physically sever dopamine loops created by doomscrolling and chemical cravings.</p>
                 </div>
-              </motion.div>
+              </div>
 
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group"
-              >
+              <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
                 <div className="flex items-center justify-center w-10 h-10 rounded-full border border-zinc-700 bg-black text-zinc-500 shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 hover:border-cyan-500 hover:text-cyan-400 transition-colors">
                   <span className="text-sm font-bold">2</span>
                 </div>
@@ -258,15 +196,9 @@ export default function App() {
                   <h4 className="text-lg font-sans font-bold text-white mb-2">Phase 2: Predictive Biometrics</h4>
                   <p className="text-sm text-zinc-400 leading-relaxed font-sans">Integration with Apple Watch and Oura. Oasis will monitor Heart Rate Variability (HRV) to detect stress spikes and chemical cravings *before* you reach for a vape or a feed, pre-emptively locking distracting vectors.</p>
                 </div>
-              </motion.div>
+              </div>
 
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.3 }}
-                className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group"
-              >
+              <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
                 <div className="flex items-center justify-center w-10 h-10 rounded-full border border-zinc-700 bg-black text-zinc-500 shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 hover:border-cyan-500 hover:text-cyan-400 transition-colors">
                   <span className="text-sm font-bold">3</span>
                 </div>
@@ -274,10 +206,10 @@ export default function App() {
                   <h4 className="text-lg font-sans font-bold text-white mb-2">Phase 3: Environmental BCI</h4>
                   <p className="text-sm text-zinc-400 leading-relaxed font-sans">Software integration into AR glasses and audio wearables to dynamically filter visual and auditory reality based on your real-time cognitive bandwidth and focus requirements.</p>
                 </div>
-              </motion.div>
+              </div>
 
             </div>
-          </motion.div>
+          </div>
         </section>
 
         {/* FUTURISTIC FEATURE SELECTOR */}
@@ -305,16 +237,8 @@ export default function App() {
               {/* Grid Background */}
               <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none"></div>
 
-              <AnimatePresence mode="wait">
                 {activeModule === 'predictive' && (
-                  <motion.div
-                    key="predictive"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.3 }}
-                    className="relative z-10"
-                  >
+                  <div className="relative z-10">
                     <EyeScannerIcon className="w-10 h-10 text-cyan-400 mb-6" />
                     <h3 className="text-3xl font-sans font-bold text-white mb-4">Algorithmic Friction</h3>
                     <p className="text-lg font-sans text-zinc-400 leading-relaxed mb-6">
@@ -323,18 +247,11 @@ export default function App() {
                     <p className="font-sans text-sm text-zinc-500">
                       By enforcing a 15-second neural-reset visualizer, we allow the prefrontal cortex to override the amygdala's impulse.
                     </p>
-                  </motion.div>
+                  </div>
                 )}
 
                 {activeModule === 'chemical' && (
-                  <motion.div
-                    key="chemical"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.3 }}
-                    className="relative z-10"
-                  >
+                  <div className="relative z-10">
                     <BioWaveIcon className="w-10 h-10 text-rose-400 mb-6" />
                     <h3 className="text-3xl font-sans font-bold text-white mb-4">Urge Surfing Protocol</h3>
                     <p className="text-lg font-sans text-zinc-400 leading-relaxed mb-6">
@@ -343,18 +260,11 @@ export default function App() {
                     <p className="font-sans text-sm text-zinc-500">
                       It hijacks the brain's processing power, leaving zero bandwidth for the craving to manifest into a physical action.
                     </p>
-                  </motion.div>
+                  </div>
                 )}
 
                 {activeModule === 'bandwidth' && (
-                  <motion.div
-                    key="bandwidth"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.3 }}
-                    className="relative z-10"
-                  >
+                  <div className="relative z-10">
                     <CpuIcon className="w-10 h-10 text-violet-400 mb-6" />
                     <h3 className="text-3xl font-sans font-bold text-white mb-4">Unbypassable Allocation</h3>
                     <p className="text-lg font-sans text-zinc-400 leading-relaxed mb-6">
@@ -363,9 +273,8 @@ export default function App() {
                     <p className="font-sans text-sm text-zinc-500">
                       When Bandwidth Allocation is active, your smartphone reverts to a purely functional state. Distraction vectors are cryptographically locked until the timer expires.
                     </p>
-                  </motion.div>
+                  </div>
                 )}
-              </AnimatePresence>
             </div>
 
           </div>
@@ -376,13 +285,7 @@ export default function App() {
 
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[400px] bg-cyan-900/10 blur-[150px] pointer-events-none rounded-full"></div>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="max-w-4xl mx-auto relative z-10"
-          >
+          <div className="max-w-4xl mx-auto relative z-10">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-sans font-bold text-white mb-6">Become a Founding Node.</h2>
               <p className="text-lg font-sans text-zinc-400 max-w-xl mx-auto">By funding Phase 1, you secure lifetime access to the software layer as we build toward the future of cognitive enhancement.</p>
@@ -430,13 +333,13 @@ export default function App() {
                   </button>
 
                   <div className="text-[10px] text-zinc-500 uppercase tracking-widest">
-                    Limit: 50 Founding Nodes
+                    Limit: 26/50 Founding Nodes Left
                   </div>
                 </div>
 
               </div>
             </div>
-          </motion.div>
+          </div>
         </section>
 
       </main>
@@ -447,6 +350,6 @@ export default function App() {
         <p>Oasis Neural Firewall. Protecting Human Bandwidth.</p>
       </footer>
 
-    </div >
+    </div>
   );
 }
