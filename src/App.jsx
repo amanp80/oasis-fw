@@ -19,8 +19,17 @@ export default function App() {
   const [isHoveringEye, setIsHoveringEye] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener('scroll', handleScroll);
+    let ticking = false;
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setScrolled(window.scrollY > 50);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -51,7 +60,7 @@ export default function App() {
       {/* HUD Background Effects (CSS Only) */}
       <div className="fixed inset-0 z-0 pointer-events-none opacity-20">
         <div className="absolute top-0 left-0 w-full h-full bg-[linear-gradient(rgba(0,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(0,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
-        <div className="absolute top-[20%] right-[-10%] w-[40vw] h-[40vw] rounded-full bg-cyan-600/10 blur-[150px]"></div>
+        <div className="absolute top-[20%] right-[-10%] w-[40vw] h-[40vw] rounded-full bg-cyan-600/10 blur-3xl will-change-transform"></div>
       </div>
 
       {/* Cybernetic Navbar */}
@@ -128,14 +137,14 @@ export default function App() {
                   <div>
                     <div className="text-[10px] text-cyan-500 tracking-widest uppercase mb-1">Subject Status</div>
                     <div className="text-sm text-white transition-opacity duration-300">
-                        {glitchText}
+                      {glitchText}
                     </div>
                   </div>
                   <CpuIcon className="w-6 h-6 text-cyan-400 opacity-50" />
                 </div>
 
                 {/* Central "Eye" / Node */}
-                <div 
+                <div
                   className="flex-1 flex items-center justify-center relative perspective-1000 group/eye cursor-pointer"
                   onMouseEnter={() => setIsHoveringEye(true)}
                   onMouseLeave={() => setIsHoveringEye(false)}
@@ -237,44 +246,44 @@ export default function App() {
               {/* Grid Background */}
               <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none"></div>
 
-                {activeModule === 'predictive' && (
-                  <div className="relative z-10">
-                    <EyeScannerIcon className="w-10 h-10 text-cyan-400 mb-6" />
-                    <h3 className="text-3xl font-sans font-bold text-white mb-4">Algorithmic Friction</h3>
-                    <p className="text-lg font-sans text-zinc-400 leading-relaxed mb-6">
-                      Algorithms operate in milliseconds. Human willpower takes seconds. Oasis bridges the gap. When you initiate an action born from dopamine depletion (e.g., opening TikTok), the OS catches the command and forces a system pause.
-                    </p>
-                    <p className="font-sans text-sm text-zinc-500">
-                      By enforcing a 15-second neural-reset visualizer, we allow the prefrontal cortex to override the amygdala's impulse.
-                    </p>
-                  </div>
-                )}
+              {activeModule === 'predictive' && (
+                <div className="relative z-10">
+                  <EyeScannerIcon className="w-10 h-10 text-cyan-400 mb-6" />
+                  <h3 className="text-3xl font-sans font-bold text-white mb-4">Algorithmic Friction</h3>
+                  <p className="text-lg font-sans text-zinc-400 leading-relaxed mb-6">
+                    Algorithms operate in milliseconds. Human willpower takes seconds. Oasis bridges the gap. When you initiate an action born from dopamine depletion (e.g., opening TikTok), the OS catches the command and forces a system pause.
+                  </p>
+                  <p className="font-sans text-sm text-zinc-500">
+                    By enforcing a 15-second neural-reset visualizer, we allow the prefrontal cortex to override the amygdala's impulse.
+                  </p>
+                </div>
+              )}
 
-                {activeModule === 'chemical' && (
-                  <div className="relative z-10">
-                    <BioWaveIcon className="w-10 h-10 text-rose-400 mb-6" />
-                    <h3 className="text-3xl font-sans font-bold text-white mb-4">Urge Surfing Protocol</h3>
-                    <p className="text-lg font-sans text-zinc-400 leading-relaxed mb-6">
-                      A biological craving (Nicotine, THC, Alcohol) peaks and fades within 180 seconds. The Oasis "Panic Protocol" is a 3-minute, high-intensity interactive sequence designed to flood your working memory and occupy your hands.
-                    </p>
-                    <p className="font-sans text-sm text-zinc-500">
-                      It hijacks the brain's processing power, leaving zero bandwidth for the craving to manifest into a physical action.
-                    </p>
-                  </div>
-                )}
+              {activeModule === 'chemical' && (
+                <div className="relative z-10">
+                  <BioWaveIcon className="w-10 h-10 text-rose-400 mb-6" />
+                  <h3 className="text-3xl font-sans font-bold text-white mb-4">Urge Surfing Protocol</h3>
+                  <p className="text-lg font-sans text-zinc-400 leading-relaxed mb-6">
+                    A biological craving (Nicotine, THC, Alcohol) peaks and fades within 180 seconds. The Oasis "Panic Protocol" is a 3-minute, high-intensity interactive sequence designed to flood your working memory and occupy your hands.
+                  </p>
+                  <p className="font-sans text-sm text-zinc-500">
+                    It hijacks the brain's processing power, leaving zero bandwidth for the craving to manifest into a physical action.
+                  </p>
+                </div>
+              )}
 
-                {activeModule === 'bandwidth' && (
-                  <div className="relative z-10">
-                    <CpuIcon className="w-10 h-10 text-violet-400 mb-6" />
-                    <h3 className="text-3xl font-sans font-bold text-white mb-4">Unbypassable Allocation</h3>
-                    <p className="text-lg font-sans text-zinc-400 leading-relaxed mb-6">
-                      When you must enter deep work, your environment must be uncompromising. Standard blockers offer an "Ignore for 15 minutes" button. Oasis removes the UI entirely.
-                    </p>
-                    <p className="font-sans text-sm text-zinc-500">
-                      When Bandwidth Allocation is active, your smartphone reverts to a purely functional state. Distraction vectors are cryptographically locked until the timer expires.
-                    </p>
-                  </div>
-                )}
+              {activeModule === 'bandwidth' && (
+                <div className="relative z-10">
+                  <CpuIcon className="w-10 h-10 text-violet-400 mb-6" />
+                  <h3 className="text-3xl font-sans font-bold text-white mb-4">Unbypassable Allocation</h3>
+                  <p className="text-lg font-sans text-zinc-400 leading-relaxed mb-6">
+                    When you must enter deep work, your environment must be uncompromising. Standard blockers offer an "Ignore for 15 minutes" button. Oasis removes the UI entirely.
+                  </p>
+                  <p className="font-sans text-sm text-zinc-500">
+                    When Bandwidth Allocation is active, your smartphone reverts to a purely functional state. Distraction vectors are cryptographically locked until the timer expires.
+                  </p>
+                </div>
+              )}
             </div>
 
           </div>
@@ -283,7 +292,7 @@ export default function App() {
         {/* PRICING (The Investment) */}
         <section id="pricing" className="py-32 px-6 border-t border-zinc-900 bg-[#000000] relative">
 
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[400px] bg-cyan-900/10 blur-[150px] pointer-events-none rounded-full"></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[400px] bg-cyan-900/10 blur-3xl will-change-transform pointer-events-none rounded-full"></div>
 
           <div className="max-w-4xl mx-auto relative z-10">
             <div className="text-center mb-16">
